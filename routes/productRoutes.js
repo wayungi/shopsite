@@ -1,8 +1,10 @@
 const express =  require('express');
 const router = express.Router();
+const { v4: uuidv4 } = require('uuid');
+
 
 const productDB = {
-    products: require('./model/product.json'),
+    products: require('../model/product.json'),
     setProducts: function(data) {
         this.products = data
     }
@@ -13,13 +15,14 @@ router.get('/', (req, res) => {
 })
 
 router.post('/', (req, res) => {
-    const { name, image, price } = req. body
+    const { name, image, price, category } = req. body
     if(!name || !image || !price) return res.status(400).json({"error": "all fields are required"}); // bad request
     const newProduct = {
         id: uuidv4(),
         name,
         image,
-        price
+        price,
+        category
     }
     productDB.setProducts([...productDB.products, newProduct])
     res.status(201).json({newProduct}) // created
@@ -47,4 +50,4 @@ router.get('/category/:category', (req, res) => {
     }
 });
 
-module.exports = { router };
+module.exports = router;
