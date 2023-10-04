@@ -49,9 +49,31 @@ const searchByCategory = (req, res) => {
     }
 }
 
+const updateProduct = (req, res) => {
+    const productToUpdate =  productDB.products.find((product) => product.id === req.body.id);
+    if(!productToUpdate) return res.status(400).json({"message": "product not found"}) //bad request
+    if(req.body.name) productToUpdate.name = req.body.name
+    if(req.body.image) productToUpdate.image = req.body.image
+    if(req.body.price) productToUpdate.price = req.body.price
+    if(req.body.category) productToUpdate.category = req.body.category
+    //remove the old product instance from memory
+    const filteredProducts =  productDB.products.filter((product) => product.id === productToUpdate.id);
+    //add the updated product
+    const updatedProductList= [...filteredProducts, productToUpdate];
+    console.log(updatedProductList);
+    productDB.setProducts(updatedProductList);
+    res.status(200).json(productToUpdate);
+};
+
+const deleteProduct = (req, res) => {
+
+};
+
 module.exports = {
     getAllProducts,
     addProduct,
     searchByName,
     searchByCategory,
+    updateProduct,
+    deleteProduct
 }
