@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "id": "1", 
+        "name": "PS5",
+        "image": "",
+        "price": 2300000
+    },
+    {
+        "id": "2", 
+        "name": "PS4",
+        "image": "",
+        "price": 1500000
+    },
+    {
+        "id": "3", 
+        "name": "call of duty moden ware fare",
+        "image": "",
+        "price": 50000
+    }
+]
