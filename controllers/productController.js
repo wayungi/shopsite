@@ -57,7 +57,7 @@ const updateProduct = (req, res) => {
     if(req.body.image) productToUpdate.image = req.body.image
     if(req.body.price) productToUpdate.price = req.body.price
     if(req.body.category) productToUpdate.category = req.body.category
-    if(req,body.stock) productToUpdate.stcok =  req.body.stock
+    if(req.body.stock) productToUpdate.stcok =  req.body.stock
     //remove the old product instance from memory
     const filteredProducts =  productDB.products.filter((product) => product.id === productToUpdate.id);
     //add the updated product
