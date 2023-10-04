@@ -32,6 +32,17 @@ app.post('/', (req, res) => {
     res.status(201).json({newProduct}) // created
 })
 
+app.get('/search/:search', (req, res) => {
+    const searchTerm =  req.params.search;
+    if(!searchTerm) return res.status(400).json({"message": "Please type what to serach for"})
+    const searchResult = productDB.products.filter((product) => product.name.toLocaleLowerCase().includes(searchTerm.toLowerCase()));
+    if(searchResult.length){
+        res.status(200).json({searchResult})
+    }else{
+        res.status(200).json({"message": "No match found"})
+    }
+})
+
 app.listen( PORT, console.log(`server is listening on port ${PORT}`))
 
 
