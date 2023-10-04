@@ -4,12 +4,10 @@ const {getAllProducts, addProduct, searchByName, searchByCategory} = require('..
 
 
 // routes
-router.get('/', getAllProducts);
-
-router.post('/', addProduct)
-
-router.get('/search/:search', searchByName)
-
+router.route('/')
+    .get(getAllProducts)
+    .post(addProduct);
+router.get('/search/:search', searchByName);
 router.get('/category/:category', searchByCategory);
 
 module.exports = router;
