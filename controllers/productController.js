@@ -14,14 +14,15 @@ const getAllProducts = (req, res) => {
 }
 
 const addProduct = (req, res) => {
-    const { name, image, price, category } = req. body
-    if(!name || !image || !price) return res.status(400).json({"error": "all fields are required"}); // bad request
+    const { name, image, price, category, stock } = req. body
+    if(!name || !image || !price || !stock) return res.status(400).json({"error": "all fields are required"}); // bad request
     const newProduct = {
         id: uuidv4(),
         name,
         image,
         price,
-        category
+        category,
+        stock
     }
     productDB.setProducts([...productDB.products, newProduct])
     res.status(201).json({newProduct}) // created
@@ -56,6 +57,7 @@ const updateProduct = (req, res) => {
     if(req.body.image) productToUpdate.image = req.body.image
     if(req.body.price) productToUpdate.price = req.body.price
     if(req.body.category) productToUpdate.category = req.body.category
+    if(req,body.stock) productToUpdate.stcok =  req.body.stock
     //remove the old product instance from memory
     const filteredProducts =  productDB.products.filter((product) => product.id === productToUpdate.id);
     //add the updated product
