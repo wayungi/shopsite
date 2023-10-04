@@ -66,7 +66,11 @@ const updateProduct = (req, res) => {
 };
 
 const deleteProduct = (req, res) => {
-
+    const productToDelete =  productDB.products.find((product) => product.id === req.body.id);
+    if(!productToDelete) return res.status(400).json({"message": "product not found"})
+    const filteredProducts = productDB.products.filter((product) => product.id !== req.body.id)
+    productDB.setProducts(filteredProducts)
+    res.status(200).json(productToDelete);
 };
 
 module.exports = {
