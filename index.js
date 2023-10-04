@@ -43,6 +43,18 @@ app.get('/search/:search', (req, res) => {
     }
 })
 
+app.get('/category/:category', (req, res) => {
+    const category =  req.params.category;
+    if(!category) return res.status(400).json({"message": "Please type category"})
+    const searchResult = productDB.products.filter((product) => product.category.toLowerCase().includes(category.toLowerCase()));
+    if(searchResult.length){
+        res.status(200).json({searchResult})
+    }else{
+        res.status(200).json({"message": "No match found"})
+    }
+
+})
+
 app.listen( PORT, console.log(`server is listening on port ${PORT}`))
 
 
