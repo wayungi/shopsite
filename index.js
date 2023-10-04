@@ -16,22 +16,20 @@ app.use(express.json())
 // app.use(express.urlencoded())
 
 app.get('/', (req, res) => {
-    res.json({"products": productDB.products})
+    res.status(200).json({"products": productDB.products})
 })
 
 app.post('/', (req, res) => {
     const { name, image, price } = req. body
-    if(!name || !image || !price) return res.json({"error": "all fields are required"});
+    if(!name || !image || !price) return res.status(400).json({"error": "all fields are required"}); // bad request
     const newProduct = {
         id: uuidv4(),
         name,
         image,
         price
     }
-  
     productDB.setProducts([...productDB.products, newProduct])
-    console.log(productDB.products)
-    res.json({newProduct})
+    res.status(201).json({newProduct}) // created
 })
 
 app.listen( PORT, console.log(`server is listening on port ${PORT}`))
