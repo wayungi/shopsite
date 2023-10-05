@@ -27,12 +27,14 @@ const logout = (req, res) => {
     const otherUsers = usersDB.users.filter((user) => user.refreshToken !== currentUser.refreshToken);
     const updatedCurrentUser = {...currentUser, refreshToken: ''} // clear the refreshToken
     usersDB.setUsers([...otherUsers, updatedCurrentUser]);
+
     fs.writeFile(
         path.join(__dirname, '..', 'model', 'users.json'),
-        JSON.stringify(usersDB.users)
+        JSON.stringify(usersDB.users),
+        err => console.log(err) // your can use await with (fs).promises and avoid the call back
     );
 
-    res.clearCookie('jwt', {httpOnly: true, secure: true});
+    res.clearCookie('jwt', {httpOnly: true, secure: true}); // clear the cookie === refreshToken
     res.sendStatus(204); //No content
 
 }
