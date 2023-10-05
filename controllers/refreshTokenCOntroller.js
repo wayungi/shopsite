@@ -16,14 +16,11 @@ const handleRefreshToken = (req, res) => {
     if(!cookies?.jwt) return res.sendStatus(401); //Unauthorized
     const refreshToken = cookies.jwt
 
-    console.log("***Cookies.jwt**")
-    console.log(cookies.jwt)
-
     //compare refreshToken in cookie with refreshToken in db & find the user
     const currentUser = usersDB.users.find((user) => user.refreshToken === refreshToken);
     if(!currentUser) return res.sendStatus(403);// forbidden
 
-    //decode the refreshToken to get the username
+    //decode the refreshToken to get the user  name
     jwt.verify(
         refreshToken,
         process.env.REFRESH_TOKEN,

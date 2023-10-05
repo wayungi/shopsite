@@ -32,7 +32,7 @@ const login = (req, res) => {
 
     //write the new users array to file
     fs.writeFile(path.join(__dirname, '..', 'model', 'users.json'), JSON.stringify(usersDB.users), err => {
-        console.log(err)
+        console.log(err)  
     });
 
     res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24*60*60*1000}); // http, will be available in response header
