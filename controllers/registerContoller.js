@@ -23,6 +23,7 @@ const registerUser = async (req, res) => {
         password: hashedPassword
     }
     usersBD.setUsers([...usersBD.users, newUser]);
+    console.log(usersBD.users)
     res.status(201).json(newUser)   ; 
 }
 
