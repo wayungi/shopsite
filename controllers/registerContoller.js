@@ -16,7 +16,7 @@ const registerUser = async (req, res) => {
     if(!username || !password) return res.status(400).json({"Message": "username & password are required"});
 
     const userExists = usersBD.users.find((user) => user.username === username);
-    if(userExists) return res.status(409).json({"message": `username ${username} is already taken`});
+    if(userExists) return res.status(409).json({"message": `Account with username ${username} already exists`});
     
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);

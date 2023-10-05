@@ -1,5 +1,7 @@
 const express =  require('express');
 const router = express.Router();
+const verifyJWT =  require('../middleware/verifyJWT')
+
 const { 
     getAllProducts,
     addProduct,
@@ -13,9 +15,9 @@ const {
 // routes
 router.route('/')
     .get(getAllProducts)
-    .post(addProduct)
-    .put(updateProduct)
-    .delete(deleteProduct);
+    .post(verifyJWT, addProduct)
+    .put(verifyJWT, updateProduct)
+    .delete(verifyJWT,deleteProduct);
 
 router.get('/search/:search', searchByName);
 router.get('/category/:category', searchByCategory);
