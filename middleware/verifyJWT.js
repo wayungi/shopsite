@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const verifyJWT =  (req, res, next) => {
     const authHeader =  req.headers['authorization']; // access token 
-    if(!authHeader) return res.sendStatus(401) //Unauthorized
+    if(!authHeader) return res.sendStatus(401) //Unauthorized 
     const token = authHeader.split(' ')[1];
     jwt.verify(
         token,
