@@ -25,7 +25,17 @@ const handleRefreshToken = (req, res) => {
         (err, decoded) => {
            if (err || currentUser.username !== decoded.username) return res.sendStatus(403);
            //generate a new access token and pass in back to the client
-           const accessToken = jwt.sign({"username": decoded.username}, process.env.ACCESS_TOKEN, {expiresIn: '1h'});
+           const roles = Object.values(currentUser.roles)
+           const accessToken = jwt.sign(
+                {   
+                    "UserInfo": {
+                        "username": decoded.username,
+                        roles
+                    }
+                },
+                process.env.ACCESS_TOKEN,
+                {expiresIn: '1h'}
+            );
            res.json({accessToken})
         }
     )

@@ -20,9 +20,10 @@ const registerUser = async (req, res) => {
     
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const newUser = {
+    const newUser = { // javascript key names can be with "" - not valid / without  - "" valid
         id: uuidv4(),
         username,
+        roles: {"User": 2001}, 
         password: hashedPassword
     }
     usersBD.setUsers([...usersBD.users, newUser]);
