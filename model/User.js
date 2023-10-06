@@ -9,11 +9,11 @@ const userSchema = new Schema({
   }, 
   roles: {
     "User": {
-        type: String,
-        default: "2001"
+        type: Number,
+        default: 2001
     },
-    "Editor": String,
-    "Admin": String
+    "Editor": Number,
+    "Admin": Number
   },
   password: String,
   refreshToken: String, // String is shorthand for {type: String}   
