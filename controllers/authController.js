@@ -21,9 +21,26 @@ const login = (req, res) => {
     const userExist = bcrypt.compare(password, currentUser.password);
     if(!userExist) return res.status(401).json({"message": "Inavlid password"});
 
+    //get the roles associated to the signed in user
+    const roles = Object.values(currentUser.roles) // get all the values from the roles object
+
     //when user exists, sign token
-    const accessToken = jwt.sign({username: currentUser.username}, process.env.ACCESS_TOKEN, { expiresIn: '1m' });
-    const refreshToken = jwt.sign({username: currentUser.username}, process.env.REFRESH_TOKEN, { expiresIn: '1d' }); // saved to db
+    const accessToken = jwt.sign(
+        {
+            "UserInfo": {
+                username: currentUser.username, 
+                roles
+            }
+        },
+        process.env.ACCESS_TOKEN,
+        { expiresIn: '1m'}
+    );
+
+    const refreshToken = jwt.sign(
+        {username: currentUser.username},
+        process.env.REFRESH_TOKEN,
+        { expiresIn: '1d' }
+    ); // saved to db
 
     //save refresh token with current user
     const otherUsers =  usersDB.users.filter((user) => user.username !== currentUser.username);
