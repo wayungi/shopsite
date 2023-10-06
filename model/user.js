@@ -15,7 +15,10 @@ const userSchema = new Schema({
     "Editor": Number,
     "Admin": Number
   },
-  password: String,
+  password: {
+    type: String,
+    required: true
+  },
   refreshToken: String, // String is shorthand for {type: String}   
 });
 
