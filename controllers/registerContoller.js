@@ -1,16 +1,6 @@
 const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
-// const fs = require('fs');
-// const path =  require('path');
 const User = require('../model/user');
-
-
-// const usersBD = {
-//     users: require('../model/users.json'),
-//     setUsers: function(data){
-//         this.users = data
-//     }
-// }
 
 const registerUser = async (req, res) => {
     const {username, password} = req.body;
