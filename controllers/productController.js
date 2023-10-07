@@ -1,5 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
-
+const Product =  require('../model/product');
 // route handlers
 
 const productDB = {
@@ -9,8 +9,10 @@ const productDB = {
     }
 }
 
-const getAllProducts = (req, res) => {
-    res.status(200).json({"products": productDB.products})
+const getAllProducts = async (req, res) => {
+    const result = await Product.find();
+    if(!result) res.sendStatus(500); // internal server error
+    res.status(200).json({"products": result})
 }
 
 const addProduct = (req, res) => {
