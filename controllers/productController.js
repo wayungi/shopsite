@@ -18,28 +18,20 @@ const getAllProducts = async (req, res) => {
 const addProduct = async (req, res) => {
     const { name, image, price, category, stock } = req. body
     if(!name || !image || !price || !stock) return res.status(400).json({"error": "all fields are required"}); // bad request
-    const newProduct = {
-        name,
-        image,
-        price,
-        category,
-        stock
-    }
-
+    const newProduct = { name, image, price, category, stock }
     const result =  await Product.create(newProduct);
     if(!result) res.status(500).json({"message": "could not save product"});
     res.status(201).json({newProduct}) // created
 }
 
-const searchByName = (req, res) => {
+const searchByName = async(req, res) => {
     const searchTerm =  req.params.search;
-    if(!searchTerm) return res.status(400).json({"message": "Please type what to serach for"})
-    const searchResult = productDB.products.filter((product) => product.name.toLocaleLowerCase().includes(searchTerm.toLowerCase()));
-    if(searchResult.length){
-        res.status(200).json({searchResult})
-    }else{
-        res.status(200).json({"message": "No match found"})
-    }
+    console.log(searchTerm)
+    if(!searchTerm) return res.status(400).json({"message": "Please type what to serach for"}) //Bad request
+    const searchResult = await Product.find({ name: new RegExp(searchTerm, 'i') }).exec();
+    if(!searchResult) return res.sendStatus(500);
+    res.status(200).json({searchResult})
+
 }
 
 const searchByCategory = (req, res) => {
