@@ -15,18 +15,19 @@ const getAllProducts = async (req, res) => {
     res.status(200).json({"products": result})
 }
 
-const addProduct = (req, res) => {
+const addProduct = async (req, res) => {
     const { name, image, price, category, stock } = req. body
     if(!name || !image || !price || !stock) return res.status(400).json({"error": "all fields are required"}); // bad request
     const newProduct = {
-        id: uuidv4(),
         name,
         image,
         price,
         category,
         stock
     }
-    productDB.setProducts([...productDB.products, newProduct])
+
+    const result =  await Product.create(newProduct);
+    if(!result) res.status(500).json({"message": "could not save product"});
     res.status(201).json({newProduct}) // created
 }
 
