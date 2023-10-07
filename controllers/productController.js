@@ -34,15 +34,12 @@ const searchByName = async(req, res) => {
 
 }
 
-const searchByCategory = (req, res) => {
+const searchByCategory = async (req, res) => {
     const category =  req.params.category;
-    if(!category) return res.status(400).json({"message": "Please type category"})
-    const searchResult = productDB.products.filter((product) => product.category.toLowerCase().includes(category.toLowerCase()));
-    if(searchResult.length){
-        res.status(200).json({searchResult})
-    }else{
-        res.status(200).json({"message": "No match found"})
-    }
+    if(!category) return res.status(400).json({"message": "Please type category"})// bad request
+    const searchResult = await Product.find({ category: new RegExp(category, 'i') }).exec();
+    if(!searchResult) return res.sendStatus(500);
+    res.status(200).json({searchResult});
 }
 
 const updateProduct = (req, res) => {
