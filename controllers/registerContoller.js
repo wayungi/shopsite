@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const { v4: uuidv4 } = require('uuid');
 const User = require('../model/user');
 
 const registerUser = async (req, res) => {

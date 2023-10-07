@@ -1,24 +1,15 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv').config(); // 
-const fs =  require('fs');
-const path =  require('path');
-
-const usersDB = {
-    users: require('../model/users.json'),
-    setUsers: function(data){
-        this.users = data
-    }
-}  
-
-const login = (req, res) => {
+const User =  require('../model/user');
+ 
+const login = async (req, res) => {
     const {username, password} = req.body;
     if(!username || !password) return res.status(401).json({"message": "Fill in username & password fields"});
 
-    const currentUser = usersDB.users.find((user) => user.username === username);
+    const currentUser = await User.findOne({ username }).exec();// usersDB.users.find((user) => user.username === username);
     if(!currentUser) return res.status(401).json({"message": `username ${username} does not exist`})
 
-    const userExist = bcrypt.compare(password, currentUser.password);
+    const userExist = await bcrypt.compare(password, currentUser.password);
     if(!userExist) return res.status(401).json({"message": "Inavlid password"});
 
     //get the roles associated to the signed in user
@@ -40,19 +31,18 @@ const login = (req, res) => {
         {username: currentUser.username},
         process.env.REFRESH_TOKEN,
         { expiresIn: '1d' }
-    ); // saved to db
+    ); 
+    
+    // saved to db
+    currentUser.refreshToken = refreshToken;
+    currentUser.save();
+    console.log(currentUser)
 
-    //save refresh token with current user
-    const otherUsers =  usersDB.users.filter((user) => user.username !== currentUser.username);
-    const LoggedInUser = {...currentUser, refreshToken}
-    usersDB.setUsers([...otherUsers, LoggedInUser]);
-
-    //write the new users array to file
-    fs.writeFile(path.join(__dirname, '..', 'model', 'users.json'), JSON.stringify(usersDB.users), err => {
-        console.log(err)  
-    });
-
-    res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24*60*60*1000}); // http, will be available in response header
+    res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24*60*60*1000}); //{sameSite: 'None' secure: true }
+    /*
+        http, will be available in response header
+        {secure: true} should  be added in production, it does not work in thunderclient
+    */ 
     res.status(200).json({accessToken}); 
 };
 
