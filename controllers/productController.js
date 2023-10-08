@@ -42,21 +42,27 @@ const searchByCategory = async (req, res) => {
     res.status(200).json({searchResult});
 }
 
-const updateProduct = (req, res) => {
-    const productToUpdate =  productDB.products.find((product) => product.id === req.body.id);
+const updateProduct = async (req, res) => {
+    const id = req.body._id;
+    const productToUpdate =  await Product.findOne({_id: id})
     if(!productToUpdate) return res.status(400).json({"message": "product not found"}) //bad request
+
+    // Once we have the priduct to update, go ahead and update each field it it exists
     if(req.body.name) productToUpdate.name = req.body.name
     if(req.body.image) productToUpdate.image = req.body.image
     if(req.body.price) productToUpdate.price = req.body.price
     if(req.body.category) productToUpdate.category = req.body.category
     if(req.body.stock) productToUpdate.stcok =  req.body.stock
+
     //remove the old product instance from memory
-    const filteredProducts =  productDB.products.filter((product) => product.id === productToUpdate.id);
+    // const filteredProducts =  productDB.products.filter((product) => product.id === productToUpdate.id);
     //add the updated product
-    const updatedProductList= [...filteredProducts, productToUpdate];
-    console.log(updatedProductList);
-    productDB.setProducts(updatedProductList);
-    res.status(200).json(productToUpdate);
+    // const updatedProductList= [...filteredProducts, productToUpdate];
+    // console.log(updatedProductList);
+    // productDB.setProducts(updatedProductList);
+    const result =  await productToUpdate.save();
+    if(!result) return res.sendStatus(500)
+    res.status(200).json(product);
 };
 
 const deleteProduct = (req, res) => {
