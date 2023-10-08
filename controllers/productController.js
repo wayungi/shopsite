@@ -21,7 +21,7 @@ const addProduct = async (req, res) => {
     const newProduct = { name, image, price, category, stock }
     const result =  await Product.create(newProduct);
     if(!result) res.status(500).json({"message": "could not save product"});
-    res.status(201).json({newProduct}) // created
+    res.status(201).json({result}) // created
 }
 
 const searchByName = async(req, res) => {
@@ -62,7 +62,7 @@ const updateProduct = async (req, res) => {
     // productDB.setProducts(updatedProductList);
     const result =  await productToUpdate.save();
     if(!result) return res.sendStatus(500)
-    res.status(200).json(product);
+    res.status(200).json(result);
 };
 
 const deleteProduct = (req, res) => {
