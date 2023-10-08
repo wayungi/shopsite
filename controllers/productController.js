@@ -64,8 +64,8 @@ const deleteProduct = async (req, res) => {
     const id =  req.body._id;
     if(!id) return res.sendStatus(400); //bad request
 
-    const productToDelete =  await Product.findByIdAndDelete(id);//productDB.products.find((product) => product.id === req.body.id);
-    if(!productToDelete) return res.status(500).json({"message": "Operation was not successfull"});
+    const productToDelete =  await Product.findByIdAndDelete(id);
+    if(!productToDelete) return res.status(400).json({"message": "Operation was not successfull"});
     res.status(200).json(productToDelete);
 };
 
