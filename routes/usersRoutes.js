@@ -3,7 +3,7 @@ const router = express.Router();
 const { registerUser } = require('../controllers/registerContoller');
 const { login } = require('../controllers/authController');
 // check the export vs the import alternative here
-const refreshTokenController = require('../controllers/refreshTokenCOntroller');
+const refreshTokenController = require('../controllers/refreshTokenController');
 const logoutController = require('../controllers/logoutController');
 
 router.post('/register',registerUser);

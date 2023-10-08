@@ -1,14 +1,6 @@
-const fs =  require('fs');
-const path =  require('path');
+const User =  require('../model/user');  
 
-const usersDB = {
-    users: require('../model/users.json'),
-    setUsers: function(data){
-        this.users = data
-    }
-}  
-
-const logout = (req, res) => {
+const logout = async (req, res) => {
     // delete the accessToken  on client when implementing log out
 
     // check if refreshToken exists in cookie
@@ -17,23 +9,20 @@ const logout = (req, res) => {
     const refreshToken = cookies.jwt;
 
     //check if refreshToken exist in db 
-    const currentUser = usersDB.users.find((user) => user.refreshToken === refreshToken);
+    const currentUser = await User.findOne({refreshToken}).exec(); // usersDB.users.find((user) => user.refreshToken === refreshToken);
     if(!currentUser) {
         res.clearCookie('jwt', { httpOnly: true });
         res.sendStatus(204); // no content
     }
 
+    console.log(currentUser)
+
     //if we reach here, then we do have a refresh token in the db and need to delete it
-    const otherUsers = usersDB.users.filter((user) => user.refreshToken !== currentUser.refreshToken);
-    const updatedCurrentUser = {...currentUser, refreshToken: ''} // clear the refreshToken
-    usersDB.setUsers([...otherUsers, updatedCurrentUser]);
+    // User.updateOne({username: currentUser.username}, {refreshToken: ''})
+    currentUser.refreshToken = '';
+    const result =  await currentUser.save();
 
-    fs.writeFile(
-        path.join(__dirname, '..', 'model', 'users.json'),
-        JSON.stringify(usersDB.users),
-        err => console.log(err) // your can use await with (fs).promises and avoid the call back
-    );
-
+    console.log(currentUser)
     res.clearCookie('jwt', {httpOnly: true, secure: true}); // clear the cookie === refreshToken
     res.sendStatus(204); //No content
 
