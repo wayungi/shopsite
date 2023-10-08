@@ -26,7 +26,6 @@ const addProduct = async (req, res) => {
 
 const searchByName = async(req, res) => {
     const searchTerm =  req.params.search;
-    console.log(searchTerm)
     if(!searchTerm) return res.status(400).json({"message": "Please type what to serach for"}) //Bad request
     const searchResult = await Product.find({ name: new RegExp(searchTerm, 'i') }).exec();
     if(!searchResult) return res.sendStatus(500);
@@ -60,7 +59,6 @@ const updateProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
-    console.log(req.body)
     const id =  req.body._id;
     if(!id) return res.sendStatus(400); //bad request
 
