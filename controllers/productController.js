@@ -54,22 +54,18 @@ const updateProduct = async (req, res) => {
     if(req.body.category) productToUpdate.category = req.body.category
     if(req.body.stock) productToUpdate.stcok =  req.body.stock
 
-    //remove the old product instance from memory
-    // const filteredProducts =  productDB.products.filter((product) => product.id === productToUpdate.id);
-    //add the updated product
-    // const updatedProductList= [...filteredProducts, productToUpdate];
-    // console.log(updatedProductList);
-    // productDB.setProducts(updatedProductList);
     const result =  await productToUpdate.save();
     if(!result) return res.sendStatus(500)
     res.status(200).json(result);
 };
 
-const deleteProduct = (req, res) => {
-    const productToDelete =  productDB.products.find((product) => product.id === req.body.id);
-    if(!productToDelete) return res.status(400).json({"message": "product not found"})
-    const filteredProducts = productDB.products.filter((product) => product.id !== req.body.id)
-    productDB.setProducts(filteredProducts)
+const deleteProduct = async (req, res) => {
+    console.log(req.body)
+    const id =  req.body._id;
+    if(!id) return res.sendStatus(400); //bad request
+
+    const productToDelete =  await Product.findByIdAndDelete(id);//productDB.products.find((product) => product.id === req.body.id);
+    if(!productToDelete) return res.status(500).json({"message": "Operation was not successfull"});
     res.status(200).json(productToDelete);
 };
 
