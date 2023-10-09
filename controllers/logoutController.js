@@ -15,14 +15,12 @@ const logout = async (req, res) => {
         res.sendStatus(204); // no content
     }
 
-    console.log(currentUser)
 
     //if we reach here, then we do have a refresh token in the db and need to delete it
     // User.updateOne({username: currentUser.username}, {refreshToken: ''})
     currentUser.refreshToken = '';
     const result =  await currentUser.save();
 
-    console.log(currentUser)
     res.clearCookie('jwt', {httpOnly: true, secure: true}); // clear the cookie === refreshToken
     res.sendStatus(204); //No content
 
