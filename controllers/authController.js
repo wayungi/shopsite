@@ -36,8 +36,6 @@ const login = async (req, res) => {
     // saved to db
     currentUser.refreshToken = refreshToken;
     currentUser.save();
-    console.log(currentUser)
-
     res.cookie('jwt', refreshToken, {httpOnly: true, maxAge: 24*60*60*1000}); //{sameSite: 'None' secure: true }
     /*
         http, will be available in response header
